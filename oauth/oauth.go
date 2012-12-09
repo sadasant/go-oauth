@@ -33,7 +33,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -108,8 +107,6 @@ func (p byKeyValue) Less(i, j int) bool {
 	}
 	return sgn < 0
 }
-
-var urlPat = regexp.MustCompile("^([^:]+)://([^:/]+)(:[0-9]+)?(.*)$")
 
 // writeBaseString writes method, url, and params to w using the OAuth signature
 // base string computation described in section 3.4.1 of the RFC.
@@ -207,7 +204,7 @@ type Client struct {
 	Credentials                   Credentials
 	TemporaryCredentialRequestURI string // Also known as request token URL.
 	ResourceOwnerAuthorizationURI string // Also known as authorization URL.
-	TokenRequestURI               string // Also known as access token URL
+	TokenRequestURI               string // Also known as access token URL.
 }
 
 // Credentials represents client, temporary and token credentials.
@@ -224,7 +221,6 @@ var (
 // SignParam adds an OAuth signature to params See
 // http://tools.ietf.org/html/rfc5849#section-3.5.2 for information about
 // transmitting OAuth parameters in a request body and
-// http://tools.ietf.org/html/rfc5849#section-3.5.2 for information about
 // transmitting OAuth parameters in a query string.
 func (c *Client) SignParam(credentials *Credentials, method, urlStr string, params url.Values) {
 	params.Set("oauth_consumer_key", c.Credentials.Token)
